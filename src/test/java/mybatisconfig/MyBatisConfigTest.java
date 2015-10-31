@@ -8,13 +8,16 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.syl.dao.ClassesMapper;
+import com.syl.dao.UserMapper;
+import com.syl.model.Classes;
 import com.syl.model.User;
 import com.syl.utils.JsonUtil;
 
-import junit.framework.TestCase;
 
 /**
  * @description 
@@ -25,22 +28,41 @@ import junit.framework.TestCase;
 public class MyBatisConfigTest {
 	
 	
-	private SqlSessionFactory sqlSessionFactory;
-
-	@Before
-	public void initConfig() throws IOException{
-		String resource = "mybatis/mybatis-config.xml";
-		InputStream inputStream = Resources.getResourceAsStream(resource);
-		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+	private SqlSession session =null ;
+	
+	@Test
+	public void selectAllUser(){
+//		List<User> user = session.selectList("User.selectAllUser");
+		UserMapper mapper = session.getMapper(UserMapper.class);
+		List<User> user = mapper.selectAllUser();
+		System.out.println(JsonUtil.toJson(user));
+	}
+	
+	
+	@Test
+	public void selectAllClasses() throws IOException{
+		ClassesMapper mapper = new ClassesMapper();
+		List<Classes> classes = mapper.selectAllClasses();
+		System.out.println(JsonUtil.toJson(classes));
 	}
 	
 	
 	
-	@Test
-	public void selectAllUser(){
-		SqlSession openSession = this.sqlSessionFactory.openSession();
-		List<User> user = openSession.selectList("User.selectAllUser");
-		System.out.println(JsonUtil.toJson(user));
+	
+	
+	@Before
+	public void initConfig() throws IOException{
+		String resource = "mybatis/mybatis-config.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		session =sqlSessionFactory.openSession();
+	}
+	
+	@After
+	public void closeSession(){
+		if(session !=null){
+			session.close();
+		}
 	}
 
 }
