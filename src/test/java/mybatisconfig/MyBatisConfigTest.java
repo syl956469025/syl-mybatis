@@ -16,7 +16,7 @@ import com.syl.dao.ClassesMapper;
 import com.syl.dao.UserMapper;
 import com.syl.model.Classes;
 import com.syl.model.User;
-import com.syl.utils.JsonUtil;
+import syl.study.utils.FastJsonUtil;
 
 
 /**
@@ -35,7 +35,7 @@ public class MyBatisConfigTest {
 //		List<User> user = session.selectList("User.selectAllUser");
 		UserMapper mapper = session.getMapper(UserMapper.class);
 		List<User> user = mapper.selectAllUser();
-		System.out.println(JsonUtil.toJson(user));
+		System.out.println(FastJsonUtil.bean2Json(user));
 	}
 	
 	
@@ -43,7 +43,7 @@ public class MyBatisConfigTest {
 	public void selectAllClasses() throws IOException{
 		ClassesMapper mapper = new ClassesMapper();
 		List<Classes> classes = mapper.selectAllClasses();
-		System.out.println(JsonUtil.toJson(classes));
+		System.out.println(FastJsonUtil.bean2Json(classes));
 	}
 	
 	
